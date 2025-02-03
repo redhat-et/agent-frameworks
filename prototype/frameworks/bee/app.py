@@ -5,7 +5,7 @@ import requests
 API_URL = "http://localhost:8000/process/"
 
 # Streamlit UI
-st.title("Prisol demo")
+st.title("parasol demo")
 
 st.write("Enter your details and check your approval status.")
 

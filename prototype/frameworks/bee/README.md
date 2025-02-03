@@ -1,4 +1,4 @@
-# 🐝 Bee Agent Framework for prisol demo 
+# 🐝 Bee Agent Framework for parasol demo 
 
 The **Bee Framework** provides two ways to develop agents:  
 
@@ -21,7 +21,7 @@ The **Bee Framework** provides two ways to develop agents:
 ## 2. Developer Version for Advanced Settings  
 The developer version provides more advanced customization options for building agents.
 
-This is a customized version of the [Bee Agent Framework](https://github.com/i-am-bee/bee-agent-framework), featuring an AI agent (`prisolv5.ts`) that evaluates risk and approval decisions. You can interact with the agent via:
+This is a customized version of the [Bee Agent Framework](https://github.com/i-am-bee/bee-agent-framework), featuring an AI agent (`parasolv5.ts`) that evaluates risk and approval decisions. You can interact with the agent via:
 
 ✅ **Command Line Execution**  
 ✅ **REST API (FastAPI)**  
@@ -33,7 +33,7 @@ This is a customized version of the [Bee Agent Framework](https://github.com/i-a
 
 ## 🚀 Features
 
-- 🤖 **Custom AI Agent (`prisolv5.ts`)** – Processes risk scoring and approval via calling any LLMs and custom tools.
+- 🤖 **Custom AI Agent (`parasolv5.ts`)** – Processes risk scoring and approval via calling any LLMs and custom tools.
 
 ---
 
@@ -53,9 +53,9 @@ This is a customized version of the [Bee Agent Framework](https://github.com/i-a
 3. Configure your project by filling in missing values in the `.env` file. You can modify based on `.env.template` file. For LLM, I've tested Groq LLM API. 
 4. Run the agent 
     4.1 run it via terminal 
-    `npm run start src/prisolv3.ts` play with it using terminal
+    `npm run start src/parasolv3.ts` play with it using terminal
     or
-    `npm run start src/prisolv5.ts` which reads from input.json and return output.json
+    `npm run start src/parasolv5.ts` which reads from input.json and return output.json
     or
     4.2 run it via a easy UI
     `python server.py` 

@@ -18,7 +18,7 @@ async def process_input(user_input: UserInput):
 
         # Run the TypeScript script
         result = subprocess.run(
-            ["npm", "run", "start", "src/prisolv5.ts"],
+            ["npm", "run", "start", "src/parasolv5.ts"],
             capture_output=True,
             text=True,
         )
