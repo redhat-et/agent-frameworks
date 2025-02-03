@@ -33,7 +33,7 @@ This is a customized version of the [Bee Agent Framework](https://github.com/i-a
 
 ## 🚀 Features
 
-- 🤖 **Custom AI Agent (`prisolv5.ts`)** – Processes risk scoring and approval via calling any LLMs and custom tools
+- 🤖 **Custom AI Agent (`prisolv5.ts`)** – Processes risk scoring and approval via calling any LLMs and custom tools.
 
 ---
 
@@ -50,7 +50,7 @@ This is a customized version of the [Bee Agent Framework](https://github.com/i-a
 
 1. Clone this repository
 2. Install dependencies `npm ci`.
-3. Configure your project by filling in missing values in the `.env` file (default LLM provider is locally hosted `Ollama`).
+3. Configure your project by filling in missing values in the `.env` file. You can modify based on `.env.template` file. For LLM, I've tested Groq LLM API. 
 4. Run the agent 
     4.1 run it via terminal 
     `npm run start src/prisolv3.ts` play with it using terminal
@@ -62,6 +62,5 @@ This is a customized version of the [Bee Agent Framework](https://github.com/i-a
     `streamlit rn app.py`
     Open http://localhost:8501 in your browser.  
    <img width="549" alt="image" src="https://github.com/user-attachments/assets/86d04051-36f4-4f9a-9e70-da39340a72be" />
-
 
 
