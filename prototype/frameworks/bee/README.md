@@ -60,6 +60,8 @@ This is a customized version of the [Bee Agent Framework](https://github.com/i-a
     4.2 run it via a easy UI
     `python server.py` 
     `streamlit rn app.py`
-    Open http://localhost:8501 in your browser.
+    Open http://localhost:8501 in your browser.  
+   <img width="549" alt="image" src="https://github.com/user-attachments/assets/86d04051-36f4-4f9a-9e70-da39340a72be" />
+
 
 
