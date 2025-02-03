@@ -1,4 +1,4 @@
-# Draft Documentation: Logging the Steps Taken  
+# 🐝 Bee Agent Framework for prisol demo 
 
 The **Bee Framework** provides two ways to develop agents:  
 
@@ -20,3 +20,46 @@ The **Bee Framework** provides two ways to develop agents:
 
 ## 2. Developer Version for Advanced Settings  
 The developer version provides more advanced customization options for building agents.
+
+This is a customized version of the [Bee Agent Framework](https://github.com/i-am-bee/bee-agent-framework), featuring an AI agent (`prisolv5.ts`) that evaluates risk and approval decisions. You can interact with the agent via:
+
+✅ **Command Line Execution**  
+✅ **REST API (FastAPI)**  
+✅ **Web Interface (Streamlit UI)**  
+
+📚 Learn more about Bee Agent Framework in the [official documentation](https://i-am-bee.github.io/bee-agent-framework/).
+
+---
+
+## 🚀 Features
+
+- 🤖 **Custom AI Agent (`prisolv5.ts`)** – Processes risk scoring and approval via calling any LLMs and custom tools
+
+---
+
+## 📦 Requirements
+
+- **[Node.js 18+](https://nodejs.org/)** (use [nvm](https://github.com/nvm-sh/nvm) for version management)
+- **Python 3.x** (for FastAPI & Streamlit)
+- **Docker** (optional, for containerized infrastructure)
+- **LLM Provider** (local or external, e.g., **Ollama, OpenAI, Groq, WatsonX**)
+
+---
+
+## 🛠️ Getting started
+
+1. Clone this repository
+2. Install dependencies `npm ci`.
+3. Configure your project by filling in missing values in the `.env` file (default LLM provider is locally hosted `Ollama`).
+4. Run the agent 
+    4.1 run it via terminal 
+    `npm run start src/prisolv3.ts` play with it using terminal
+    or
+    `npm run start src/prisolv5.ts` which reads from input.json and return output.json
+    or
+    4.2 run it via a easy UI
+    `python server.py` 
+    `streamlit rn app.py`
+    Open http://localhost:8501 in your browser.
+
+
