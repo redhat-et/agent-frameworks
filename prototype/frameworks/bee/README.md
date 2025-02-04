@@ -21,7 +21,7 @@ The **Bee Framework** provides two ways to develop agents:
 ## 2. Developer Version for Advanced Settings  
 The developer version provides more advanced customization options for building agents.
 
-This is a customized version of the [Bee Agent Framework](https://github.com/i-am-bee/bee-agent-framework), featuring an AI agent (`parasolv5.ts`) that evaluates risk and approval decisions. You can interact with the agent via:
+This is a customized version of the [Bee Agent Framework]([https://github.com/i-am-bee/bee-agent-framework](https://github.com/i-am-bee/bee-agent-framework-starter)), featuring an AI agent (`parasolv5.ts`) that evaluates risk and approval decisions. You can interact with the agent via:
 
 ✅ **Command Line Execution**  
 ✅ **REST API (FastAPI)**  
