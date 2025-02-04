@@ -1,7 +1,0 @@
-streamlit
-autogen==0.4.0
-pandas
-numpy
-matplotlib
-seaborn
-scikit-learn
