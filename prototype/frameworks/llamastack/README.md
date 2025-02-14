@@ -117,8 +117,17 @@ Run the script:
 python code-agent.py
 ```
 ---
+## **9. Run a build in web search Agent**
 
-## **9. Run a Custom Tool Agent**
+If you wish to test around the web search tool with external web search API, you can follow the example in `tool_websearch.py`. This example modified based on exsiting web search tool from https://colab.research.google.com/github/meta-llama/llama-stack/blob/main/docs/getting_started.ipynb. Allow run it through podman follow same instruction.
+
+Run the script:
+
+```bash
+python tool_websearch.py
+```
+---
+## **10. Run a Custom Tool Agent**
 
 If you wish to add your own custom tool, you can follow the example in `custom-tool.py`. This example defines a simple calculator tool to perform arithmetic operations such as add, subtract, multiply and divide.
 
@@ -128,7 +137,7 @@ Run the script:
 python custom-tool.py
 ```
 
-## **10. Debugging Common Issues**
+## **11. Debugging Common Issues**
 **Check if Podman is Running:**
 ```bash
 podman ps
