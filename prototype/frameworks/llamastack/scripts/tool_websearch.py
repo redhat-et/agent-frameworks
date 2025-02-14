@@ -13,7 +13,6 @@ load_dotenv()
 inference_model = os.getenv("INFERENCE_MODEL")
 llama_stack_port = os.getenv("LLAMA_STACK_PORT")
 ollama_url = os.getenv("OLLAMA_URL")
-TAVILY_SEARCH_API_KEY = os.environ["TAVILY_SEARCH_API_KEY"]
 
 print(f"Model: {inference_model}")
 print(f"Llama Stack Port: {llama_stack_port}")
@@ -24,7 +23,7 @@ def create_http_client():
 
     return LlamaStackClient(
         base_url=f"http://localhost:{llama_stack_port}", # return LlamaStackClient(base_url="http://localhost:8321", timeout = 6000)
-        provider_data = {"tavily_search_api_key": os.environ['TAVILY_SEARCH_API_KEY']}  # according to https://llama-stack.readthedocs.io/en/latest/building_applications/tools.html
+        provider_data = {"tavily_search_api_key": os.environ["TAVILY_SEARCH_API_KEY"]}  # according to https://llama-stack.readthedocs.io/en/latest/building_applications/tools.html
     )
 
 # Initialize the Llama Stack client, choosing between library or HTTP client
