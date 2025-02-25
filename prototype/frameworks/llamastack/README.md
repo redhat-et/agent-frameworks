@@ -44,7 +44,13 @@ Pull the required image:
 ```bash
 podman pull docker.io/llamastack/distribution-ollama
 ```
-Run the server using:
+Before executing the next command, make sure to create a local directory to mount into the container’s file system.
+
+```bash
+mkdir -p ~/.llama
+```
+
+Now run the server using:
 ```bash
 podman run --privileged -it \
   -p $LLAMA_STACK_PORT:$LLAMA_STACK_PORT \
