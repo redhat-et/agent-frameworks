@@ -143,6 +143,60 @@ Run the script:
 ```bash
 python scripts/custom-tool.py
 ```
+---
+## **11. Llama Stack - Logging and Tracing using OpenTelemetry collector and Jaegar.**
+
+### Overview
+The LlamaStack Metric Telemetry API provides robust functionalities for logging and tracing spans during workflows. Proper configuration is essential for efficient monitoring and tracking.
+
+### 1. Update the `run.yaml` Configuration
+
+Modify the configuration to include telemetry sinks, otel sink works with any service compatible with the OpenTelemetry collector.
+
+```yaml
+telemetry:
+  - provider_id: meta-reference
+    provider_type: inline::meta-reference
+    config:
+      service_name: ${env.OTEL_SERVICE_NAME:llama-stack}
+      sinks: ${env.TELEMETRY_SINKS:console, otel, sqlite}
+      otel_endpoint: "http://localhost:4318/v1/traces"
+      sqlite_db_path: ${env.SQLITE_DB_PATH:~/.llama/distributions/ollama/trace_store.db}
+```
+Additionally, make the necessary adjustments to include more RAG providers required for the specific use case.
+
+### 3.Run the Llama Stack server
+
+Run the LlamaStack server using the updated run.yaml configuration file:
+
+```bash
+llama stack run --image-type conda <path to your template>/run.yaml
+```
+
+### 4.Create a session for each run
+
+Create a session ID for better tracking of each run. Include the following snippet in your code:
+
+```python
+session_id = agent.create_session("test-session")
+print(f"Created session_id={session_id} for Agent({agent.agent_id})")
+```
+
+### 5.Start Jaegar Instance
+
+Deploy a Jaeger instance with the OTLP HTTP endpoint exposed at port 4318. Use the following command:
+
+```bash
+podman run --rm --name jaeger \
+  -p 16686:16686 -p 4318:4318 \
+  jaegertracing/jaeger:2.1.0
+```
+
+### 6. Visualise traces
+
+Access the Jaeger UI to visualize traces by navigating to: http://localhost:16686/
+
+---
 ## **Run a wolfram-alpha powered Agent**
 
 If you wish to test the Wolfram Alpha tool, you can follow the example in `tool_wolframAlpha.py`. This example is necessary to demonstrate how to build an agent based on Wolfram Alpha, as previous documentation examples are outdated. Run it through Podman following the same instructions.
