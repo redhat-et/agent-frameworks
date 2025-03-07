@@ -3,17 +3,20 @@ from llama_stack_client.types.tool_def_param import Parameter
 
 
 class ArbitraryClientTool(ClientTool):
-    def __init__(self, n):
+    def __init__(self, n, name, type, description):
         self.n = n
+        self.name = name
+        self.type = type
+        self.description = description
     
     def _arbitrary_tool(self, *kwargs):
         return kwargs
 
-    def _generate_kwargs(self, num:int) -> dict:
+    def _generate_kwargs(self,num:int,name:str,parameter_type:str,description:str) -> dict:
        kwargs = {f"q_{n}": Parameter(
-                name=f"q_{n}",
-                parameter_type="str",
-                description=f"q_{n}",
+                name=f"{name}",
+                parameter_type=f"{parameter_type}",
+                description=f"{description}",
                 required=True,
             ) for n in range(num)}
        
@@ -26,7 +29,7 @@ class ArbitraryClientTool(ClientTool):
         return "This tool is used to evaluate the number of parameters an LLM can manage during tool calling."
     
     def get_params_definition(self):
-        return self._generate_kwargs(self.n)
+        return self._generate_kwargs(self.n,self.name,self.type,self.description)
     
     def run_impl(self, **kwargs):
         return self._arbitrary_tool(kwargs)
