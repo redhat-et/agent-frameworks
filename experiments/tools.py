@@ -3,24 +3,20 @@ from llama_stack_client.types.tool_def_param import Parameter
 
 
 class ArbitraryClientTool(ClientTool):
-    def __init__(self, n, name, type, description):
-        self.n = n
-        self.name = name
-        self.type = type
-        self.description = description
+    def __init__(self, all_params):
+        self.all_params = all_params
     
     def _arbitrary_tool(self, *kwargs):
         return kwargs
 
-    def _generate_kwargs(self,num:int,name:str,parameter_type:str,description:str) -> dict:
-       kwargs = {f"q_{n}": Parameter(
-                name=f"{name}",
-                parameter_type=f"{parameter_type}",
-                description=f"{description}",
-                required=True,
-            ) for n in range(num)}
-       
-       return kwargs
+    def _generate_kwargs(self, all_params) -> dict:
+        kwargs = {f"param_{i}": Parameter(
+            name=all_params["name"][i],
+            parameter_type=all_params["type"][i],
+            description=all_params["description"][i],
+            required=True,
+        ) for i in range(len(all_params["name"]))}
+        return kwargs
 
     def get_name(self):
         return "arbitrary_client_tool"
@@ -29,15 +25,12 @@ class ArbitraryClientTool(ClientTool):
         return "This tool is used to evaluate the number of parameters an LLM can manage during tool calling."
     
     def get_params_definition(self):
-        return self._generate_kwargs(self.n,self.name,self.type,self.description)
+        return self._generate_kwargs(self.all_params)
     
     def run_impl(self, **kwargs):
         return self._arbitrary_tool(kwargs)
 
 
-
-# Tool params
-# Should
 class GenerateParam(ClientTool):
     def __init__(self, name, parameter_type, description):
         self.name = name
@@ -50,7 +43,7 @@ class GenerateParam(ClientTool):
     def _generate_kwargs(self, name:str,parameter_type:str,description:str) -> dict:
        kwargs = {f"Param": Parameter(
                 name=f"{name}",
-                parameter_type=f"{parameter_type}",
+                parameter_type= f"{parameter_type}",
                 description=f"{description}",
                 required=True,
             )}
