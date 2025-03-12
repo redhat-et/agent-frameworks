@@ -137,8 +137,7 @@ async def run_main():
     print(inference_model)
 
     client = LlamaStackClient(
-        base_url="http://llamastack-deployment-llama-serve.apps.ocp-beta-test.nerc.mghpcc.org:80"
-        # base_url=f"http://localhost:{os.getenv('LLAMA_STACK_PORT')}"
+        base_url=f"http://localhost:{os.getenv('LLAMA_STACK_PORT')}"
     )
     
     real_tools = [weather_info, word_count, reverse_string, uppercase, insurance_scorer]
