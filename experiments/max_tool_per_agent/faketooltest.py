@@ -132,19 +132,24 @@ def log_results(results):
         writer.writerows(results)
 
 async def run_main():
+    # inference_model = os.getenv("INFERENCE_MODEL")
+    inference_model = "meta-llama/Llama-3.2-3B-Instruct"
+    print(inference_model)
+
     client = LlamaStackClient(
-        base_url=f"http://localhost:{os.getenv('LLAMA_STACK_PORT')}"
+        base_url="http://llamastack-deployment-llama-serve.apps.ocp-beta-test.nerc.mghpcc.org:80"
+        # base_url=f"http://localhost:{os.getenv('LLAMA_STACK_PORT')}"
     )
     
     real_tools = [weather_info, word_count, reverse_string, uppercase, insurance_scorer]
     results = []
 
-    for total_tools in range(5, 50, 5):  # Increase by 5 up to 50 tools
+    for total_tools in range(5, 50, 5):  # Increase by 5 up to 45 tools
         tools = real_tools + generate_fake_tools(total_tools - len(real_tools))
         
         agent = Agent(
             client=client,
-            model=os.getenv("INFERENCE_MODEL"),
+            model=inference_model,
             instructions="""You are an AI assistant. Use the correct tool for each query.
             When using the tools:
             1. Extract the relevant number or values from the user's request.
@@ -155,6 +160,7 @@ async def run_main():
         )
         
         session_id = agent.create_session("tool-experiment-session")
+        print(f'session id is {session_id}')
         exception_count = 0
         tool_execution_count = 0
         correct_tool_count = 0
@@ -176,17 +182,22 @@ async def run_main():
                 response_time = end_time - start_time
                 total_latency += response_time
 
-                print(response.steps[1].step_type, response.steps[1].tool_calls[0].tool_name)
-                print(response.output_message.content)
+                print(f"Inference: {response.output_message.content}")
 
                 steps = response.steps
-                tool_executed = any(step.step_type == "tool_execution" for step in steps)
-                correct_tool_used = any(step.tool_calls[0].tool_name == correct_tool.__name__ for step in steps if step.step_type == "tool_execution")
+                if len(steps) > 1:
+                    tool_executed = any(step.step_type == "tool_execution" for step in steps)
+                    correct_tool_used = any(step.tool_calls[0].tool_name == correct_tool.__name__ for step in steps if step.step_type == "tool_execution")
+                    if tool_executed:
+                        print(f"Executed Tool: {steps[1].tool_calls[0].tool_name}")
+                        print(f"Ground Truth Tool: {correct_tool.__name__}")
+                    tool_execution_count += tool_executed
+                    correct_tool_count += correct_tool_used
+                else:
+                    print("Error: Not enough steps in response to access step 1.")
                 
-                tool_execution_count += tool_executed
-                correct_tool_count += correct_tool_used
-                
-            except Exception:
+            except Exception as e:
+                print(f"Error processing query: {e}")
                 exception_count += 1
 
         exception_rate = exception_count / len(queries)
