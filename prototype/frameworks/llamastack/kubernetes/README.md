@@ -1,6 +1,6 @@
 # vLLM serve
 
-This serves as a starting point to deploy `meta-llama/Llama-3.1-8B-Instruct` via vLLM. Long term this should be handled by RHOAI.
+This serves as a starting point to deploy `meta-llama/Llama-3.2-1B-Instruct` via vLLM. Long term this should be handled by RHOAI.
 
 ## Requirements
 
@@ -38,7 +38,7 @@ To check if the model is running correctly, you can try the following `curl` com
  curl http://localhost:8000/v1/completions \
     -H "Content-Type: application/json" \
     -d '{
-        "model": "meta-llama/Llama-3.1-8B-Instruct",
+        "model": "meta-llama/Llama-3.2-1B-Instruct",
         "prompt": "San Francisco is a",
         "max_tokens": 200,
         "temperature": 0
