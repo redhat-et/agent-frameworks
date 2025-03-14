@@ -1,0 +1,14 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  labels:
+    operators.coreos.com/loki-operator.openshift-operators-redhat: ""
+  name: loki-operator
+  namespace: openshift-operators-redhat
+spec:
+  channel: stable-6.1
+  installPlanApproval: Automatic
+  name: loki-operator
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
+  startingCSV: loki-operator.v6.1.2
