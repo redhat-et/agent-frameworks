@@ -1,0 +1,23 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: simple-mcp-server
+spec:
+  selector:
+    matchLabels:
+      app: simple-mcp-server
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: simple-mcp-server
+    spec:
+      containers:
+      - name: simple-mcp-server
+        image: quay.io/michaelclifford/simple-tools:0.0.4
+        ports:
+          - containerPort: 8000
+            protocol: TCP
+          - containerPort: 8080
+            protocol: TCP
+        resources: {}
