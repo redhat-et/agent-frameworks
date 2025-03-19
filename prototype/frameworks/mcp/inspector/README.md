@@ -1,0 +1,2 @@
+# Note
+The deployment.yaml uses the Red Hat ubi9 nodejs image to run the mcp model inspector application. The frontend of the application runs through a proxy server for connecting to MCP servers. In the current state, the application hardcodes the proxy server to `localhost` ([source](https://github.com/modelcontextprotocol/inspector/blob/main/client/src/App.tsx#L50)). This means when I access the OpenShift route, it tries to reach my local `localhost` instead of an exposed port through OpenShift. Since it can't be configured at the moment, this is blocked.
