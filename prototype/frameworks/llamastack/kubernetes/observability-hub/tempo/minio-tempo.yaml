@@ -1,0 +1,49 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: minio-tempo
+  namespace: observability-hub
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: minio-tempo
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: minio-tempo
+    spec:
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: minio-tempo
+      containers:
+        - resources: {}
+          name: minio-tempo
+          command:
+            - /bin/sh
+            - '-c'
+            - |
+              mkdir -p /storage/tempo && \
+              minio server /storage
+          env:
+            # TEST VALUES ONLY USED IN TEST DEV ENV
+            - name: MINIO_ROOT_USER
+              value: tempo # notsecret 
+            - name: MINIO_ROOT_PASSWORD
+              value: supersecret # notsecret
+          ports:
+            - containerPort: 9000
+              protocol: TCP
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: storage
+              mountPath: /storage
+          image: quay.io/minio/minio
+      restartPolicy: Always
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+  strategy:
+    type: Recreate
+  progressDeadlineSeconds: 600
+
