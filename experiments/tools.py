@@ -3,6 +3,11 @@ from llama_stack_client.types.tool_def_param import Parameter
 
 
 class ArbitraryClientTool(ClientTool):
+    """AbitraryClientTool is a tool that returns the parameters passed to it.
+    
+    :param all_params: A dictionary containing the parameters to be returned.
+    :return: The parameters passed to the tool.
+    """
     def __init__(self, all_params):
         self.all_params = all_params
     
@@ -32,6 +37,14 @@ class ArbitraryClientTool(ClientTool):
 
 
 class GenerateParam(ClientTool):
+    """GenerateParam is a tool that generates a random realistic parameter.
+    
+    :param name: The name of the parameter.
+    :param parameter_type: The type of the parameter.
+    :param description: The description of the parameter.
+    :returns: A random realistic parameter.
+    """
+    
     def __init__(self, name, parameter_type, description):
         self.name = name
         self.parameter_type = parameter_type
