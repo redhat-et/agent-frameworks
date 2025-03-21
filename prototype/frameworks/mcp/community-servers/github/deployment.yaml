@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: github-mcp-server
+  namespace: mcp-community-servers
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: github-mcp-server
+  template:
+    metadata:
+      labels:
+        app: github-mcp-server
+    spec:
+      containers:
+      - name: github-mcp-server
+        image: image-registry.openshift-image-registry.svc:5000/mcp-community-servers/github-mcp-server:latest
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          npx -y supergateway --stdio "node dist/index.js" --port 8080
+        ports:
+        - containerPort: 8080
+        env:
+        - name: NPM_CONFIG_CACHE
+          value: /tmp/.npm
+        - name: GITHUB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: github-credentials
+              key: token
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: github-mcp-server
+  namespace: mcp-community-servers
+spec:
+  selector:
+    app: github-mcp-server
+  ports:
+  - port: 80
+    targetPort: 8080
+---
+
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: github-mcp-server
+  namespace: mcp-community-servers
+spec:
+  to:
+    kind: Service
+    name: github-mcp-server
+  port:
+    targetPort: 8080
+    
