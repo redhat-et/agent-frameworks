@@ -33,11 +33,7 @@ def get_params(i):
                     session_id= session_id,
                     stream=False,
                     )
-        # for log in EventLogger().log(response):
-        #     log.print()
         steps = response.steps
-        # for step in steps:
-        #     print(step)
         param = steps[1].tool_calls[0].arguments['param']
         if isinstance(param, str):
             try:
@@ -65,11 +61,29 @@ def get_params(i):
 def test_abitrary_client_tool(all_params):
     arbitrary_client_tool = ArbitraryClientTool(all_params)
 
-    agent = Agent(client,
-                model="meta-llama/Llama-3.1-8B-Instruct",
-                enable_session_persistence = False,
-                instructions = "You are a helpful assistant. Use the ArbitraryClientTool and pass in a value for each parameter according to its type.",
-                tools=[arbitrary_client_tool]
+    arb_client = LlamaStackClient(base_url="http://llamastack-deployment-llama-serve.apps.ocp-beta-test.nerc.mghpcc.org:80")
+    
+    agent_config = AgentConfig(
+    model="meta-llama/Llama-3.2-3B-Instruct",
+    enable_session_persistence = False,
+    instructions = "You are a helpful assistant. Use the ArbitraryClientTool and pass in a value for each parameter according to its type.",
+    sampling_params = {
+        "strategy": {
+            "type": "top_p",
+            "temperature": 0.5,
+            "top_p": 0.9,
+        }
+    },
+    toolgroups=[],
+    client_tools = [arbitrary_client_tool.get_tool_definition()],
+    tool_choice="auto",
+    # note: the below works for llama-3.1-8B model, but if you plan to use the
+    # llama-3.2-3B model, you will need to change it to tool_prompt_format="python_list"
+    tool_prompt_format="python_list",
+    )
+    agent = Agent(client = arb_client,
+                agent_config=agent_config,
+                client_tools=[arbitrary_client_tool]
                 )
 
     session_id = agent.create_session("test")
@@ -78,9 +92,6 @@ def test_abitrary_client_tool(all_params):
                 session_id= session_id,
                 stream=False,
                 )
-
-    # for log in EventLogger().log(response):
-    #         log.print()
     return response
 
 def main():

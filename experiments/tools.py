@@ -4,7 +4,7 @@ from llama_stack_client.types.tool_def_param import Parameter
 
 class ArbitraryClientTool(ClientTool):
     """AbitraryClientTool is a tool that returns the parameters passed to it.
-    
+    The agent checks the parameter type of each parameter and the passes a value based on that parameter type.
     :param all_params: A dictionary containing the parameters to be returned.
     :return: The parameters passed to the tool.
     """
