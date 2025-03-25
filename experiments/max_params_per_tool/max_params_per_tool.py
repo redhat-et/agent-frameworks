@@ -70,7 +70,7 @@ def test_abitrary_client_tool(all_params):
     sampling_params = {
         "strategy": {
             "type": "top_p",
-            "temperature": 0.5,
+            "temperature": 0.001,
             "top_p": 0.9,
         }
     },
