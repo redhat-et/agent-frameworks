@@ -20,7 +20,7 @@ spec:
         - name: VLLM_MAX_TOKENS
           value: "128000"
         - name: INFERENCE_MODEL
-          value: meta-llama/Llama-3.2-3B-Instruct
+          value: ibm-granite/granite-3.2-8b-instruct
         - name: VLLM_URL
           value: http://vllm:8000/v1
         - name: VLLM_API_TOKEN
