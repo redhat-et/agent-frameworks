@@ -2,42 +2,102 @@ from llama_stack_client.lib.agents.event_logger import EventLogger
 from llama_stack_client.lib.agents.agent import Agent
 from llama_stack_client.types.agent_create_params import AgentConfig
 from llama_stack_client import LlamaStackClient
-
-from ..tools import ArbitraryClientTool
-
+from ..tools import ArbitraryClientTool, GenerateParam
+import json
+import ast
 
 
 client = LlamaStackClient(base_url="http://localhost:8321")
 
-for i in range(15,30,5):
-    print(i)
-    
-    arbitrary_client_tool = ArbitraryClientTool(i)
-    print(arbitrary_client_tool.get_tool_definition())
+# GENERATE PARAM TOOL
+def get_params(i):
+    generate_param_tool = GenerateParam("param","str","This is a parameter")
 
-    agent_config = AgentConfig(
+    agent_param = Agent(client,
         model="meta-llama/Llama-3.1-8B-Instruct",
         enable_session_persistence = False,
-        instructions = "You are a helpful assistant.",
-        toolgroups = [],
-        client_tools = [arbitrary_client_tool.get_tool_definition()],
-        tool_choice="required",
-        tool_prompt_format="json",
-        max_infer_iters=4,
-        )
+        instructions = """You are a Parameter generator assistant. Use the GenerateParam tool to generate realistic and random parameters for a function that will be created.
+        When using the generate_param_tool tool:
+        1. Select a parameter type (str/bool/int/float) for it.
+        3. For the randomly selected parameter type create a realistic name different to previous params to match the parameter type, and a description based on a random topic.
+        4. Pass these the name, parameter type and description in to the generate_param_tool
+        """,
+        tools=[generate_param_tool],
+                )
+    all_params = {"name": [], "type": [], "description": []}
 
-    agent = Agent(client=client,
+    session_id = agent_param.create_session("test")
+    for count in range(i):
+        response = agent_param.create_turn(
+                    messages=[{"role":"user","content":"use the generate_param_tool and pass in a name, type, and description"}],
+                    session_id= session_id,
+                    stream=False,
+                    )
+        steps = response.steps
+        param = steps[1].tool_calls[0].arguments['param']
+        if isinstance(param, str):
+            try:
+                # Attempt to convert the string to a dictionary (assuming it's a JSON string)
+                param = ast.literal_eval(param)
+            except (ValueError, SyntaxError):
+                print("Error: The string is not a valid dictionary format.")
+        
+        
+        name = param.get('name', 'Not Available')
+        param_tpy = param.get('type', 'Not Available')
+        description = param.get('description', 'Not Available')
+
+        if name in all_params['name']:
+            print("Parameter already exists")
+            i = i - 1
+        else:
+            print(f"Parameter {count+1}: name {name}, type:{param_tpy}, description:{description}")
+            all_params["name"].append(name)
+            all_params["type"].append(param_tpy)
+            all_params["description"].append(description)
+        
+    return all_params
+
+def test_abitrary_client_tool(all_params):
+    arbitrary_client_tool = ArbitraryClientTool(all_params)
+
+    arb_client = LlamaStackClient(base_url="http://llamastack-deployment-llama-serve.apps.ocp-beta-test.nerc.mghpcc.org:80")
+    
+    agent_config = AgentConfig(
+    model="meta-llama/Llama-3.2-3B-Instruct",
+    enable_session_persistence = False,
+    instructions = "You are a helpful assistant. Use the ArbitraryClientTool and pass in a value for each parameter according to its type.",
+    sampling_params = {
+        "strategy": {
+            "type": "top_p",
+            "temperature": 0.001,
+            "top_p": 0.9,
+        }
+    },
+    toolgroups=[],
+    client_tools = [arbitrary_client_tool.get_tool_definition()],
+    tool_choice="auto",
+    # note: the below works for llama-3.1-8B model, but if you plan to use the
+    # llama-3.2-3B model, you will need to change it to tool_prompt_format="python_list"
+    tool_prompt_format="python_list",
+    )
+    agent = Agent(client = arb_client,
                 agent_config=agent_config,
                 client_tools=[arbitrary_client_tool]
                 )
 
     session_id = agent.create_session("test")
     response = agent.create_turn(
-                messages=[{"role":"user","content":"You must use the arbitrary_client_tool"}],
+                messages=[{"role":"user","content":"use the arbitrary_client_tool and pass in parameters according to their type"}],
                 session_id= session_id,
+                stream=False,
                 )
+    return response
 
-    for r in EventLogger().log(response):
-        r.print()
-    
-    print("\n")
+def main():
+    all_params = get_params(1)
+    response = test_abitrary_client_tool(all_params)
+    for step in response.steps:
+        print(step)
+if __name__ == "__main__":
+    main()
